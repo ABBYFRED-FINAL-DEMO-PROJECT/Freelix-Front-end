@@ -9,14 +9,13 @@ import Projects from './pages/dashboard/Projects';
 import Invoices from './pages/dashboard/Invoices';
 import Proposals from './pages/dashboard/Proposals';
 import About from './pages/about/About';
-import LandingPage from './pages/LandingPage'; // Import your LandingPage
-import Login from './pages/Login'; // Import your Login page
-import Signup from './pages/Signup'; // Import your Signup page
-
+import LandingPage from './pages/LandingPage'; 
+import Login from './pages/Login'; 
+import Signup from './pages/Signup'; 
 const App = () => {
   return (
     <Router>
-      <NavigationBar /> {/* Always render the NavigationBar */}
+      <NavigationBar /> 
 
       <Routes>
         {/* Default route for landing page */}
