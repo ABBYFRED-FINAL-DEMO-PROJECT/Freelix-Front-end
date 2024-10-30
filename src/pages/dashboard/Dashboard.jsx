@@ -2,10 +2,11 @@
 import React, { useState } from 'react';
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, AppBar, IconButton, Tooltip } from '@mui/material';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import WorkIcon from '@mui/icons-material/Work';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MoonIcon from '@mui/icons-material/Brightness2';
 import SunIcon from '@mui/icons-material/WbSunny';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -51,21 +52,21 @@ const Dashboard = () => {
         variant="permanent"
         open={drawerOpen}
         sx={{
-          width: drawerOpen ? drawerWidth : 56, // Minimized width when collapsed
+          width: drawerOpen ? drawerWidth : 56,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerOpen ? drawerWidth : 56,
             bgcolor: darkMode ? '#001B12' : '#00796B',
             color: '#FFFFFF',
             transition: 'width 0.3s',
-            overflowX: 'hidden', // Hide overflow in collapsed state
+            overflowX: 'hidden',
           },
         }}
       >
-        <Toolbar /> {/* This helps offset the AppBar height */}
+        <Toolbar /> {/* Offset for AppBar height */}
         <List>
           {[
-            { text: 'Overview', icon: <AccountCircleIcon />, to: '/dashboard' },
+            { text: 'Overview', icon: <DashboardIcon />, to: '/dashboard' }, // Updated Overview icon
             { text: 'Projects', icon: <WorkIcon />, to: '/dashboard/projects' },
             { text: 'Invoices', icon: <ReceiptIcon />, to: '/dashboard/invoices' },
             { text: 'Proposals', icon: <AssignmentIcon />, to: '/dashboard/proposals' },
@@ -89,9 +90,9 @@ const Dashboard = () => {
           flexGrow: 1,
           p: 3,
           transition: 'margin 0.3s',
-          ml: drawerOpen ? `${drawerWidth}px` : '56px', // Adjust main content margin based on drawer state
+          ml: drawerOpen ? `${drawerWidth}px` : '56px',
           color: darkMode ? '#FFFFFF' : '#000000',
-          pt: 8, // Ensures main content doesn’t overlap with AppBar
+          pt: 8, // Prevents main content overlap with AppBar
         }}
       >
         <Toolbar /> {/* Spacer Toolbar to prevent overlap with AppBar */}
