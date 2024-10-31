@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import {
-  Box, Button, Checkbox, FormControlLabel, Grid, IconButton, InputAdornment, Link,
+  Box, Button, CircularProgress, Grid, IconButton, InputAdornment, Link,
   TextField, Typography, Card, CardContent
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import GoogleIcon from '@mui/icons-material/Google';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    fullName: '', username: '', email: '', password: '', repeatPassword: '',
-    phoneNumber: '', personalId: '', rememberMe: false
+    fullName: '', email: '', password: '', confirmPassword: '', rememberMe: false
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -25,10 +24,15 @@ const Signup = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    toast.success('Sign Up Successful!', {
-      position: toast.POSITION.TOP_CENTER,
-      autoClose: 2000,
-    });
+    setLoading(true);
+
+    setTimeout(() => {
+      toast.success('Sign Up Successful!', {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+      setLoading(false);
+    }, 2000); // Simulate a sign-up delay
   };
 
   return (
@@ -36,26 +40,19 @@ const Signup = () => {
       <Card sx={{
         display: 'flex', flexDirection: { xs: 'column', md: 'row' },
         maxWidth: 750, width: '100%', borderRadius: 3, overflow: 'hidden', boxShadow: 5,
-        minHeight: { xs: 280, md: 340 } // Slightly reduced height for responsiveness
+        minHeight: { xs: 280, md: 340 }
       }}>
         {/* Left Side: Signup Form */}
         <CardContent sx={{ width: { xs: '100%', md: '50%' }, padding: 2 }}>
-          <Typography variant="h4" gutterBottom align="center" color="primary">
+          <Typography variant="h4" gutterBottom align="center" color="#00796B">
             Sign Up
           </Typography>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={1}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth label="Full Name" placeholder="Enter your full name"
                   name="fullName" value={formData.fullName} onChange={handleChange}
-                  InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth label="Username" placeholder="Choose a username"
-                  name="username" value={formData.username} onChange={handleChange}
                   InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
@@ -66,7 +63,7 @@ const Signup = () => {
                   InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth label="Password" placeholder="Create a password"
                   name="password" type={showPassword ? 'text' : 'password'}
@@ -83,11 +80,11 @@ const Signup = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <TextField
-                  fullWidth label="Repeat Password" placeholder="Re-enter your password"
-                  name="repeatPassword" type={showPassword ? 'text' : 'password'}
-                  value={formData.repeatPassword} onChange={handleChange}
+                  fullWidth label="Confirm Password" placeholder="Re-enter your password"
+                  name="confirmPassword" type={showPassword ? 'text' : 'password'}
+                  value={formData.confirmPassword} onChange={handleChange}
                   InputProps={{
                     sx: { paddingY: 0.3, fontSize: '0.9rem' },
                     endAdornment: (
@@ -97,30 +94,19 @@ const Signup = () => {
                         </IconButton>
                       </InputAdornment>
                     ),
-                    placeholder: "Re-enter your password" // Ensure the placeholder text does not overlap
                   }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth label="Phone Number" placeholder="Enter your phone number"
-                  name="phoneNumber" type="tel" value={formData.phoneNumber} onChange={handleChange}
-                  InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth label="Personal ID" placeholder="Enter your personal ID"
-                  name="personalId" value={formData.personalId} onChange={handleChange}
-                  InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Button
-                  fullWidth variant="contained" sx={{ backgroundColor: '#00796B', color: '#fff', mt: 1 }}
+                  fullWidth
+                  variant="contained"
+                  sx={{ backgroundColor: '#00796B', color: '#fff', mt: 1 }}
                   type="submit"
+                  disabled={loading}
+                  startIcon={loading && <CircularProgress size={20} color="inherit" />}
                 >
-                  Sign Up
+                  {loading ? 'Signing Up...' : 'Sign Up'}
                 </Button>
               </Grid>
               <Grid item xs={12}>
@@ -133,7 +119,7 @@ const Signup = () => {
                       borderColor: '#4285F4',
                     },
                   }}
-                  startIcon={<GoogleIcon sx={{ color: '#EA4335' }} />}
+                  startIcon={<img src="/google.svg" alt="Google G logo" style={{ width: 20, height: 20 }} />}
                 >
                   Sign Up with Google
                 </Button>
