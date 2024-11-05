@@ -1,4 +1,3 @@
-// src/layouts/NavigationBar.jsx
 import React, { useState, useEffect } from 'react';
 import {
   AppBar,
@@ -10,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Box,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -54,7 +54,14 @@ const NavigationBar = () => {
           transition: 'background-color 0.3s ease',
         }}
       >
-        <Toolbar className="flex justify-between items-center">
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: { xs: '0 8px', md: '0 16px' },
+          }}
+        >
           {/* App Logo */}
           <Typography
             variant="h6"
@@ -75,7 +82,7 @@ const NavigationBar = () => {
             <MenuIcon />
           </IconButton>
           {/* Navigation Buttons for larger screens */}
-          <div className="hidden md:flex space-x-4">
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             {navItems.map((item) => (
               <Button
                 key={item.text}
@@ -91,19 +98,21 @@ const NavigationBar = () => {
                 {item.text}
               </Button>
             ))}
-          </div>
+          </Box>
         </Toolbar>
       </AppBar>
 
       {/* Drawer for mobile view */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <List>
-          {navItems.map((item) => (
-            <ListItem button component={Link} to={item.to} key={item.text} onClick={toggleDrawer(false)}>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
+        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+          <List>
+            {navItems.map((item) => (
+              <ListItem button component={Link} to={item.to} key={item.text}>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       </Drawer>
     </>
   );
