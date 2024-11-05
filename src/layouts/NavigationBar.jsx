@@ -39,7 +39,6 @@ const NavigationBar = () => {
   };
 
   const navItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, to: '/dashboard' },
     { text: 'About', icon: <InfoIcon />, to: '/about' },
     { text: 'Login', icon: <LoginIcon />, to: '/login' },
     { text: 'Signup', icon: <PersonAddIcon />, to: '/signup' },
@@ -52,6 +51,7 @@ const NavigationBar = () => {
         sx={{
           backgroundColor: scrolled ? '#00796B' : 'transparent',
           transition: 'background-color 0.3s ease',
+          padding: '0 50px', // Added padding for both sides
         }}
       >
         <Toolbar
@@ -62,14 +62,16 @@ const NavigationBar = () => {
             padding: { xs: '0 8px', md: '0 16px' },
           }}
         >
-          {/* App Logo */}
+          {/* App Logo with link to home page */}
           <Typography
             variant="h6"
-            component="div"
+            component={Link}
+            to="/"
             sx={{
               color: scrolled ? 'white' : '#00796B',
               transition: 'color 0.3s ease',
               fontWeight: 'bold',
+              textDecoration: 'none', // To remove underline
             }}
           >
             Freelix
