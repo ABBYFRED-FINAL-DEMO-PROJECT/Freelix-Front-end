@@ -83,7 +83,7 @@ const LandingPage = () => {
               }}
               className="shadow hover:bg-gray-200 transition"
               component={Link}
-              to="/dashboard"
+              to="/login"
             >
               Get Started
             </Button>
@@ -96,7 +96,7 @@ const LandingPage = () => {
           alt="Bottom Right Illustration"
           style={{
             position: 'absolute',
-            bottom: '0', // Set to the very bottom of the container
+            bottom: '3%', // Set to the very bottom of the container
             right: '5%',
             transform: 'translateY(50%)', // Pushes the illustration down slightly
             width: '20%', // Responsive width for smaller screens

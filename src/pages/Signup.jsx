@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
   Box, Button, CircularProgress, Grid, IconButton, InputAdornment, Link,
-  TextField, Typography, Card, CardContent
+  TextField, Typography, Card, CardContent, CardMedia
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -28,8 +30,9 @@ const Signup = () => {
 
     setTimeout(() => {
       toast.success('Sign Up Successful!', {
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 2000,
+        position: 'top-center',
+        autoClose: 1000,
+        onClose: () => navigate('/login'), // Navigate to login after the toast closes
       });
       setLoading(false);
     }, 2000); // Simulate a sign-up delay
@@ -53,6 +56,7 @@ const Signup = () => {
                 <TextField
                   fullWidth label="Full Name" placeholder="Enter your full name"
                   name="fullName" value={formData.fullName} onChange={handleChange}
+                  required
                   InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
@@ -60,6 +64,7 @@ const Signup = () => {
                 <TextField
                   fullWidth label="Email" placeholder="youremail@.com"
                   name="email" type="email" value={formData.email} onChange={handleChange}
+                  required
                   InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
@@ -68,6 +73,7 @@ const Signup = () => {
                   fullWidth label="Password" placeholder="Create a password"
                   name="password" type={showPassword ? 'text' : 'password'}
                   value={formData.password} onChange={handleChange}
+                  required
                   InputProps={{
                     sx: { paddingY: 0.3, fontSize: '0.9rem' },
                     endAdornment: (
@@ -85,6 +91,7 @@ const Signup = () => {
                   fullWidth label="Confirm Password" placeholder="Re-enter your password"
                   name="confirmPassword" type={showPassword ? 'text' : 'password'}
                   value={formData.confirmPassword} onChange={handleChange}
+                  required
                   InputProps={{
                     sx: { paddingY: 0.3, fontSize: '0.9rem' },
                     endAdornment: (
@@ -138,34 +145,18 @@ const Signup = () => {
           </form>
         </CardContent>
 
-        {/* Right Side: Reasons to Sign Up */}
-        <Box
+        {/* Right Side: Image using CardMedia */}
+        <CardMedia
+          component="img"
           sx={{
-            width: { xs: '100%', md: '50%' }, backgroundColor: '#00796B', color: 'white', padding: 3,
-            display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
-            clipPath: { md: 'polygon(0 0, 100% 0, 100% 100%, 0 85%)' }
+            width: { xs: '100%', md: '50%' },
+            objectFit: 'contain',
+            height: '100%', // Ensure the image fills the card height
+            borderRadius: 0,
           }}
-        >
-          <Typography variant="h5" gutterBottom>
-            Why Sign Up?
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-            <Box component="span" sx={{ color: 'white', mr: 1 }}>✔️</Box>
-            Access exclusive projects and opportunities.
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-            <Box component="span" sx={{ color: 'white', mr: 1 }}>✔️</Box>
-            Effortlessly track your time and manage invoices.
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-            <Box component="span" sx={{ color: 'white', mr: 1 }}>✔️</Box>
-            Build your profile and grow your freelance business.
-          </Typography>
-          <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box component="span" sx={{ color: 'white', mr: 1 }}>✔️</Box>
-            Seamlessly collaborate with clients.
-          </Typography>
-        </Box>
+          image="/signup.png" // Path pointing directly to the public folder
+          alt="Sign Up illustration"
+        />
       </Card>
 
       <ToastContainer />
