@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { apiUserSignup } from '../services/auth'; // Ensure this path is correct and matches your project structure
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -24,18 +25,24 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      toast.success('Sign Up Successful!', {
-        position: 'top-center',
-        autoClose: 1000,
-        onClose: () => navigate('/login'), // Navigate to login after the toast closes
-      });
-      setLoading(false);
-    }, 2000); // Simulate a sign-up delay
+    try {
+      const { fullName, email, password, confirmPassword } = formData;
+      const payload = { fullName, email, password, confirmPassword };
+
+      const response = await apiUserSignup(payload); // API call
+      console.log(response.data);
+      toast.success('Registered successfully');
+      navigate("/login"); // Redirect to login page after signup
+    } catch (error) {
+      console.log(error);
+      toast.error('Registration failed, please try again'); // Show error toast
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
   };
 
   return (
