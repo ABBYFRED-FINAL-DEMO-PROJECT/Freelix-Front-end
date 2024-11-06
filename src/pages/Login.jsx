@@ -6,36 +6,43 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
+import { apiUserLogin } from "../services/auth"; // Import API function
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    fullName: '', email: '', password: '', confirmPassword: '', rememberMe: false
+    email: '', password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
-    const { name, value, type, checked } = event.target;
+    const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const response = await apiUserLogin(formData); // API call
+      console.log(response.data);
       toast.success('Login Successful!', {
         position: 'top-center',
         autoClose: 1000,
         onClose: () => navigate('/dashboard'),
       });
+    } catch (error) {
+      console.log(error);
+      toast.error('Login failed, please try again');
+    } finally {
       setLoading(false);
-    }, 2000); // Simulate a login delay
+    }
   };
 
   return (
@@ -56,14 +63,16 @@ const Login = () => {
                 <TextField
                   fullWidth label="Email" placeholder="youremail@.com"
                   name="email" type="email" value={formData.email} onChange={handleChange}
+                  required
                   InputProps={{ sx: { paddingY: 0.3, fontSize: '0.9rem' } }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  fullWidth label="Password" placeholder="Create a password"
+                  fullWidth label="Password" placeholder="Enter your password"
                   name="password" type={showPassword ? 'text' : 'password'}
                   value={formData.password} onChange={handleChange}
+                  required
                   InputProps={{
                     sx: { paddingY: 0.3, fontSize: '0.9rem' },
                     endAdornment: (
@@ -85,7 +94,7 @@ const Login = () => {
                   disabled={loading}
                   startIcon={loading && <CircularProgress size={20} color="inherit" />}
                 >
-                  {loading ? 'Logging In...' : 'Login '}
+                  {loading ? 'Logging In...' : 'Login'}
                 </Button>
                 <Link href="/forgot-password" variant="body2" sx={{ color: '#00796B', ml: 1 }}>
                   Forgot Password?

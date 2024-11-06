@@ -1,4 +1,3 @@
-// src/pages/dashboard/AddProject.jsx
 import React, { useState } from 'react';
 import {
   Box,
@@ -136,10 +135,9 @@ const AddProject = () => {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
           fullWidth
           disabled={loading}
-          className="bg-[#005f5b] hover:bg-[#00796B]"
+          style={{ backgroundColor: '#00796B', color: 'white' }}
         >
           {loading ? <CircularProgress size={24} color="inherit" /> : 'Add Project'}
         </Button>

@@ -7,6 +7,7 @@ import Overview from './pages/dashboard/Overview';
 import Profile from './pages/dashboard/Profile';
 import Projects from './pages/dashboard/Projects';
 import Invoices from './pages/dashboard/Invoices';
+import InvoicePreview from './pages/dashboard/InvoicePreview'; // Import the InvoicePreview component
 import Proposals from './pages/dashboard/Proposals';
 import About from './pages/about/About';
 import LandingPage from './pages/LandingPage'; 
@@ -31,7 +32,7 @@ const AppContent = () => {
 
         {/* Routes for login and signup */}
         <Route path="/login" element={<Login />} /> 
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} /> 
 
         {/* Wrap dashboard routes within a separate path */}
         <Route path="/dashboard" element={<Dashboard />}> 
@@ -39,6 +40,7 @@ const AppContent = () => {
           <Route path="overview" element={<Overview />} />
           <Route path="projects" element={<Projects />} />
           <Route path="invoices" element={<Invoices />} />
+          <Route path="invoice-preview/:invoiceId" element={<InvoicePreview />} /> {/* New route for invoice preview */}
           <Route path="proposals" element={<Proposals />} />
           <Route path="profile" element={<Profile />} />
           <Route path="project/:projectId" element={<ProjectDetails />} /> {/* Route for project details */}
