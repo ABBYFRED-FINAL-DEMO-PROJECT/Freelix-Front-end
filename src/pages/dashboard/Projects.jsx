@@ -1,5 +1,4 @@
-// src/pages/dashboard/Projects.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Table,
   TableBody,
@@ -10,23 +9,37 @@ import {
   Paper,
   IconButton,
   Button,
+  Tooltip,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { ViewList, ViewModule } from '@mui/icons-material';
-
-// Sample projects updated with client name field
-const sampleProjects = [
-  { id: 1, name: 'Project Alpha', clientName: 'Client A', dateAdded: '2024-11-01' },
-  { id: 2, name: 'Project Beta', clientName: 'Client B', dateAdded: '2024-11-02' },
-  { id: 3, name: 'Project Gamma', clientName: 'Client C', dateAdded: '2024-11-03' },
-  // Add more sample projects as needed
-];
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { ViewList, ViewModule, Add } from '@mui/icons-material';
+import { apiGetAllProjects } from '../../services/dashboard.js';
 
 const Projects = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 6;
   const navigate = useNavigate();
+
+  // Access handleAddProject, fetchTrigger, and projects from the Outlet context in Dashboard
+  const { handleAddProject, fetchTrigger, projects = [] } = useOutletContext();
+
+  const fetchProjects = async () => {
+    try {
+      // Fetch projects without filter or sort
+      const res = await apiGetAllProjects();
+      console.log("API Response:", res);
+      setProjects(res?.data?.data || []); 
+      console.log("Fetched projects:", res.data.data);  
+      handleAddProject(res.data.data); // Update the projects list in the parent component
+    } catch (error) {
+      console.log("Error fetching projects", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchTrigger]); // Re-fetch projects on toggle
 
   const handleViewChange = (mode) => {
     setViewMode(mode);
@@ -36,24 +49,37 @@ const Projects = () => {
     navigate(`/dashboard/project/${projectId}`);
   };
 
-  const paginatedProjects = sampleProjects.slice(
+  const handleAddProjectClick = () => {
+    navigate('/dashboard/add-project');
+  };
+
+  const paginatedProjects = projects.slice(
     (currentPage - 1) * projectsPerPage,
     currentPage * projectsPerPage
   );
 
-  const totalPages = Math.ceil(sampleProjects.length / projectsPerPage);
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
 
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold text-teal-700">Projects</h1>
-        <div>
-          <IconButton onClick={() => handleViewChange('grid')} className={`mr-2 ${viewMode === 'grid' ? 'text-teal-700' : ''}`}>
-            <ViewModule />
-          </IconButton>
-          <IconButton onClick={() => handleViewChange('list')} className={`${viewMode === 'list' ? 'text-teal-700' : ''}`}>
-            <ViewList />
-          </IconButton>
+        <div className="flex items-center">
+          <Tooltip title="Add New Project">
+            <IconButton onClick={handleAddProjectClick} className="mr-2 text-teal-700">
+              <Add />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Grid View">
+            <IconButton onClick={() => handleViewChange('grid')} className={`mr-2 ${viewMode === 'grid' ? 'text-teal-700' : ''}`}>
+              <ViewModule />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="List View">
+            <IconButton onClick={() => handleViewChange('list')} className={`${viewMode === 'list' ? 'text-teal-700' : ''}`}>
+              <ViewList />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
 

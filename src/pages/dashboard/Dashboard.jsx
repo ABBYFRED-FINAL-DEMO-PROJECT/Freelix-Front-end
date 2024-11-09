@@ -25,7 +25,6 @@ import MoonIcon from '@mui/icons-material/Brightness2';
 import SunIcon from '@mui/icons-material/WbSunny';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddCircleIcon from '@mui/icons-material/AddCircle'; // Import the Add Circle Icon
 
 const drawerWidth = 240;
 const collapsedWidth = 56;
@@ -33,7 +32,7 @@ const collapsedWidth = 56;
 const Dashboard = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(!useMediaQuery('(max-width:600px)')); // Collapse drawer by default on small screens
-  const [projects, setProjects] = useState([]); // Initialize projects state
+  const [fetchTrigger, setFetchTrigger] = useState(false); // State to trigger re-fetch
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -50,8 +49,8 @@ const Dashboard = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const handleAddProject = (newProject) => {
-    setProjects((prevProjects) => [...prevProjects, newProject]);
+  const handleAddProject = () => {
+    setFetchTrigger((prev) => !prev); // Toggling fetchTrigger to re-fetch projects
   };
 
   return (
@@ -96,8 +95,7 @@ const Dashboard = () => {
         <List>
           {[{ text: 'Overview', icon: <DashboardIcon />, to: '/dashboard' },
             { text: 'Projects', icon: <WorkIcon />, to: '/dashboard/projects' },
-            { text: 'Add Project', icon: <AddCircleIcon />, to: '/dashboard/add-project' },
-            { text: 'Invoices', icon: <ReceiptIcon />, to: '/dashboard/invoices' },
+            { text: 'Invoice', icon: <ReceiptIcon />, to: '/dashboard/invoice' },
             { text: 'Proposals', icon: <AssignmentIcon />, to: '/dashboard/proposals' },
             { text: 'Profile', icon: <AccountCircleIcon />, to: '/dashboard/profile' },
           ].map(({ text, icon, to }) => (
@@ -122,10 +120,11 @@ const Dashboard = () => {
           ml: drawerOpen ? 0 : `${collapsedWidth}px`, // Remove space when drawer is open
           color: darkMode ? '#FFFFFF' : '#000000',
           pt: 8,
+          maxWidth: '100%', // Prevents horizontal scroll on smaller screens
         }}
       >
         <Toolbar />
-        <Outlet context={{ handleAddProject, projects }} /> {/* Pass down the handleAddProject function and projects state */}
+        <Outlet context={{ handleAddProject, fetchTrigger }} /> {/* Pass handleAddProject and fetchTrigger */}
       </Box>
     </Box>
   );

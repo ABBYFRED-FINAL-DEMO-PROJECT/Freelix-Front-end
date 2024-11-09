@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   TextField,
@@ -7,19 +7,20 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
-} from '@mui/material';
-import { useOutletContext, useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
+} from "@mui/material";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { apiPostProject } from "../../services/dashboard";
 
 const AddProject = () => {
   const [formData, setFormData] = useState({
-    projectName: '',
-    clientName: '',
-    projectStartDate: '',
-    projectDeadline: '',
-    projectBudget: '',
-    projectStructure: '',
-    projectDescription: '',
+    projectName: "",
+    clientName: "",
+    projectBegins: "",
+    projectDeadline: "",
+    projectBudget: "",
+    status: "",
+    description: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,19 +36,28 @@ const AddProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     try {
-      // Simulate adding the project
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      handleAddProject({ ...formData });
-      enqueueSnackbar('Project added successfully!', { variant: 'success' });
-      navigate('/dashboard/projects');
+      // Call the actual API to post the project data
+      const response = await apiPostProject(formData);
+      console.log('Project posted:', response);
+      
+      // Show success notification
+      enqueueSnackbar("Project added successfully!", { variant: "success" });
+  
+      // Call handleAddProject to update the project list
+      handleAddProject();
+  
+      // Navigate back to projects page
+      navigate("/dashboard/projects");
     } catch (err) {
-      setError(err.message || 'Failed to add project');
-      enqueueSnackbar('Failed to add project!', { variant: 'error' });
+      setError(err.message || "Failed to add project");
+      enqueueSnackbar("Failed to add project!", { variant: "error" });
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <Box p={4} className="bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
@@ -76,15 +86,15 @@ const AddProject = () => {
           onChange={handleChange}
         />
         <TextField
-          label="Project Start Date"
-          name="projectStartDate"
+          label="Project Begins"
+          name="projectBegins"
           placeholder="Select start date"
           type="date"
           variant="outlined"
           fullWidth
           required
           InputLabelProps={{ shrink: true }}
-          value={formData.projectStartDate}
+          value={formData.projectBegins}
           onChange={handleChange}
         />
         <TextField
@@ -110,26 +120,28 @@ const AddProject = () => {
           value={formData.projectBudget}
           onChange={handleChange}
         />
+
         <TextField
-          label="Project Structure"
-          name="projectStructure"
-          placeholder="Describe the project structure"
-          variant="outlined"
-          fullWidth
-          required
-          value={formData.projectStructure}
-          onChange={handleChange}
-        />
-        <TextField
-          label="Project Description"
-          name="projectDescription"
+          label=" Description"
+          name="description"
           placeholder="Enter project description"
           variant="outlined"
           fullWidth
           multiline
           minRows={3}
           required
-          value={formData.projectDescription}
+          value={formData.description}
+          onChange={handleChange}
+        />
+
+        <TextField
+          label="Status"
+          name="status"
+          placeholder="Add a project status"
+          variant="outlined"
+          fullWidth
+          required
+          value={formData.status}
           onChange={handleChange}
         />
         <Button
@@ -137,14 +149,26 @@ const AddProject = () => {
           variant="contained"
           fullWidth
           disabled={loading}
-          style={{ backgroundColor: '#00796B', color: 'white' }}
+          style={{ backgroundColor: "#00796B", color: "white" }}
         >
-          {loading ? <CircularProgress size={24} color="inherit" /> : 'Add Project'}
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Add Project"
+          )}
         </Button>
       </form>
       {error && (
-        <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={() => setError(null)}>
-          <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+        <Snackbar
+          open={Boolean(error)}
+          autoHideDuration={6000}
+          onClose={() => setError(null)}
+        >
+          <Alert
+            onClose={() => setError(null)}
+            severity="error"
+            sx={{ width: "100%" }}
+          >
             {error}
           </Alert>
         </Snackbar>
