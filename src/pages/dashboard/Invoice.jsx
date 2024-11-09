@@ -60,15 +60,22 @@ const Invoice = () => {
   };
 
   // Calculations
-  const calculateSubtotal = () =>
-    invoiceData.items.reduce(
-      (total, item) => total + parseFloat(item.rate || 0),
-      0
-    );
+  // Calculations
+// Calculations
+const calculateSubtotal = () =>
+  invoiceData.items.reduce(
+    (total, item) =>
+      total + (parseFloat(item.quantity || 0) * parseFloat(item.rate || 0)),
+    0
+  );
 
-  const calculateTax = () => calculateSubtotal() * (invoiceData.taxRate / 100);
+const calculateTax = () => {
+  const taxRate = parseFloat(invoiceData.taxRate) || 6;
+  return calculateSubtotal() * (taxRate / 100);
+};
 
-  const calculateTotal = () => calculateSubtotal() + calculateTax();
+const calculateTotal = () => calculateSubtotal() + calculateTax();
+
 
   // Toggle editable state
   const toggleEditable = (field) => {
@@ -242,29 +249,19 @@ const Invoice = () => {
 
       {/* Totals */}
       <div className="text-right mb-6">
-        <div className="py-1">
-          <span className="font-semibold text-gray-800">Subtotal:</span> $
-          {calculateSubtotal().toFixed(2)}
-        </div>
-        <div className="py-1">
-          <label className="font-semibold text-gray-800 mr-2">Tax Rate:</label>
-          <input
-            type="number"
-            value={invoiceData.taxRate}
-            onChange={(e) => handleInputChange(e, "taxRate")}
-            placeholder="Tax %"
-            className="w-16 p-1 text-right border rounded focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-        <div className="py-1">
-          <span className="font-semibold text-gray-800">Tax Amount:</span> $
-          {calculateTax().toFixed(2)}
-        </div>
-        <div className="py-1 text-xl font-bold">
-          <span className="text-gray-800">Total:</span> $
-          {calculateTotal().toFixed(2)}
-        </div>
-      </div>
+  <div className="py-1">
+    <span className="font-semibold text-gray-800">Subtotal:</span> $
+    {calculateSubtotal().toFixed(2)}
+  </div>
+  <div className="py-1">
+    <span className="font-semibold text-gray-800">Tax:</span> $
+    {calculateTax().toFixed(2)}
+  </div>
+  <div className="py-2 text-lg font-bold border-t border-gray-300 mt-2">
+    <span>Total:</span> ${calculateTotal().toFixed(2)}
+  </div>
+</div>
+
 
       {/* Payment Info */}
       <div className="mb-6">
@@ -287,26 +284,50 @@ const Invoice = () => {
       </div>
 
       {/* Terms & Conditions */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-800">
-          Terms & Conditions:
-        </h3>
-        {invoiceData.isTermsEditable ? (
-          <textarea
-            value={invoiceData.terms}
-            onChange={(e) => handleInputChange(e, "terms")}
-            placeholder="Terms & Conditions"
-            className="w-full text-sm text-gray-700 bg-gray-50 p-2 rounded-md focus:bg-white focus:border focus:border-blue-500 focus:outline-none transition-colors"
-          />
-        ) : (
-          <p
-            onClick={() => toggleEditable("isTermsEditable")}
-            className="w-full text-sm text-gray-700"
-          >
-            {invoiceData.terms}
-          </p>
-        )}
+      <div className="flex flex-col md:flex-row justify-between items-start mb-4">
+  <div className="md:w-1/2 w-full">
+    <h3 className="text-lg font-semibold text-gray-800">Terms & Conditions:</h3>
+    {invoiceData.isTermsEditable ? (
+      <textarea
+        value={invoiceData.terms}
+        onChange={(e) => handleInputChange(e, "terms")}
+        className="w-full text-sm text-gray-700 bg-gray-50 p-2 rounded-md focus:bg-white focus:border focus:border-blue-500 focus:outline-none transition-colors"
+      />
+    ) : (
+      <p
+        onClick={() => toggleEditable("isTermsEditable")}
+        className="w-full text-sm text-gray-700"
+      >
+        {invoiceData.terms}
+      </p>
+    )}
+  </div>
+
+  <div className="md:w-1/3 w-full mt-4 md:mt-0 text-right">
+    <h3 className="text-lg font-semibold text-gray-800">Signature:</h3>
+    {invoiceData.signatureImage ? (
+      <div
+        className="cursor-pointer"
+        onClick={() => setInvoiceData({ ...invoiceData, signatureImage: null })}
+      >
+        <img
+          src={invoiceData.signatureImage}
+          alt="Signature"
+          className="w-24 h-12 object-contain mx-auto"
+        />
       </div>
+    ) : (
+      <div>
+        <input
+          type="file"
+          onChange={(e) => handleFileChange(e, "signatureImage")}
+          className="mt-2 text-sm"
+        />
+      </div>
+    )}
+  </div>
+</div>
+
     </div>
   );
 };
