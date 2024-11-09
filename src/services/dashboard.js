@@ -22,34 +22,40 @@ export const apiUpdateUserData = async (_userId, payload) => {
   }
 };
 
-// Post Advert
-export const apiPostAdvert = async (payload) => {
+// Post Project
+export const apiPostProject = async (payload) => {
   try {
-    const response = await apiClient.post("/adverts", payload, {
+    // Retrieve the token from localStorage or any other storage location
+    // const token = localStorage.getItem('token'); // Adjust based on where the token is stored
+
+    const response = await apiClient.post("/projects", payload, {
       headers: {
-        'Content-Type': 'multipart/form-data', // For image uploads
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${token}`, // Add the authorization header
       },
     });
+
     return response.data;
   } catch (error) {
-    console.error("Error posting new advert:", error);
-    throw error;
+    console.error("Error posting new project:", error);
+    throw error; // Re-throw to allow the calling function to handle it
   }
 };
 
+
 // Get All Projects
-export const apiGetAllProjects = async (filter, sort) => {
-  return apiClient.get(`/adverts?filter=${filter}&limit=0&sort=${sort}`);
+export const apiGetAllProjects = async () => {
+  return apiClient.get(`/projects?limit=0`);
 };
 
 
-// Get Advert by ID
-export const apiGetProjects = async (advertId) => {
+// Get Project by ID
+export const apiGetProjects = async (projectId) => {
   try {
-    const response = await apiClient.get(`/adverts/${advertId}`);
+    const response = await apiClient.get(`/projects/${projectId}`);
     return response.data; // Return the advert details
   } catch (error) {
-    console.error("Error fetching advert:", error);
+    console.error("Error fetching project:", error);
     throw error;
   }
 };
@@ -58,7 +64,7 @@ export const apiGetProjects = async (advertId) => {
 // Update Project
 export const apiUpdateProject = async (projectId, payload) => {
   try {
-    const response = await apiClient.patch(`/adverts/${projectId}`, payload);
+    const response = await apiClient.patch(`/projects/${projectId}`, payload);
     return response.data; // Return the updated advert
   } catch (error) {
     console.error("Error updating project:", error);
@@ -69,7 +75,7 @@ export const apiUpdateProject = async (projectId, payload) => {
 // Delete Advert
 export const apiDeleteProject = async (projectId) => {
   try {
-    const response = await apiClient.delete(`/adverts/${projectId}`);
+    const response = await apiClient.delete(`/projects/${projectId}`);
     return response.data; // Return confirmation of deletion
   } catch (error) {
     console.error("Error deleting project:", error);

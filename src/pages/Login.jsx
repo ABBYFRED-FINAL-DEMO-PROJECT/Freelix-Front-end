@@ -26,24 +26,30 @@ const Login = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
+  event.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await apiUserLogin(formData); // API call
-      console.log(response.data);
-      toast.success('Login Successful!', {
-        position: 'top-center',
-        autoClose: 1000,
-        onClose: () => navigate('/dashboard'),
-      });
-    } catch (error) {
-      console.log(error);
-      toast.error('Login failed, please try again');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const response = await apiUserLogin(formData); // API call
+    console.log(response.data);
+
+    // Optionally store token or user data here
+    localStorage.setItem('token', response.data.accessToken);
+
+    toast.success('Login Successful!', {
+      position: 'top-center',
+      autoClose: 1000,
+    });
+
+    // Navigate to dashboard immediately after successful login
+    navigate('/dashboard');
+  } catch (error) {
+    console.log(error);
+    toast.error('Login failed, please try again');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Box sx={{ marginTop: 4, marginBottom: 4, display: 'flex', justifyContent: 'center', px: 2 }}>
