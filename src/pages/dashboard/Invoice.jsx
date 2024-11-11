@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 
 const Invoice = () => {
   const [invoiceData, setInvoiceData] = useState({
@@ -85,9 +88,25 @@ const calculateTotal = () => calculateSubtotal() + calculateTax();
     }));
   };
 
+  const downloadPDF = () => {
+    const invoiceElement = document.getElementById("invoice");
+  
+    html2canvas(invoiceElement).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+  
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("invoice.pdf");
+    });
+  };
+  
+
   // JSX layout
   return (
-    <div className="p-4 sm:p-6 md:p-8 bg-white max-w-3xl mx-auto shadow-lg rounded-lg border border-gray-300">
+    <div id="invoice" className="p-4 sm:p-6 md:p-8 bg-white max-w-3xl mx-auto shadow-lg rounded-lg border border-gray-300">
       {/* Header with Logo and Company Info */}
       <div className="flex flex-col sm:flex-row items-center border-b border-gray-300 pb-4 mb-4">
         <div className="w-full sm:w-1/3 mb-4 sm:mb-0">
@@ -327,6 +346,15 @@ const calculateTotal = () => calculateSubtotal() + calculateTax();
     )}
   </div>
 </div>
+<div className="flex justify-end">
+<button
+  onClick={downloadPDF}
+  className="bg-[#00796B] hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mt-4"
+>
+  Download PDF
+</button>
+</div>
+
 
     </div>
   );

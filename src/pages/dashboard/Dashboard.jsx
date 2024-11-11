@@ -25,6 +25,7 @@ import MoonIcon from '@mui/icons-material/Brightness2';
 import SunIcon from '@mui/icons-material/WbSunny';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import TaskIcon from '@mui/icons-material/Task';
 
 const drawerWidth = 240;
 const collapsedWidth = 56;
@@ -93,10 +94,11 @@ const Dashboard = () => {
       >
         <Toolbar />
         <List>
-          {[{ text: 'Overview', icon: <DashboardIcon />, to: '/dashboard' },
+          {[{ text: 'Task', icon: <TaskIcon />, to: '/dashboard' },
             { text: 'Projects', icon: <WorkIcon />, to: '/dashboard/projects' },
             { text: 'Invoice', icon: <ReceiptIcon />, to: '/dashboard/invoice' },
             { text: 'Proposals', icon: <AssignmentIcon />, to: '/dashboard/proposals' },
+            // { text: 'Task', icon: <TaskIcon />, to: '/dashboard/Task' },
             { text: 'Profile', icon: <AccountCircleIcon />, to: '/dashboard/profile' },
           ].map(({ text, icon, to }) => (
             <Tooltip title={drawerOpen ? '' : text} arrow key={text} placement="right">

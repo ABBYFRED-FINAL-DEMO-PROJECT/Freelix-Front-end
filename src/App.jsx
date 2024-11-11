@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { SnackbarProvider } from 'notistack';
 import NavigationBar from './layouts/NavigationBar';
 import Dashboard from './pages/dashboard/Dashboard';
-import Overview from './pages/dashboard/Overview'; 
+// import TaskDashboard from './pages/dashboard/TaskDashboard'; 
 import Profile from './pages/dashboard/Profile';
 import Projects from './pages/dashboard/Projects';
 import Invoice from './pages/dashboard/Invoice';
@@ -16,6 +16,7 @@ import Signup from './pages/Signup';
 import ProjectDetails from './pages/dashboard/ProjectDetails';
 import AddProject from './pages/dashboard/AddProject';
 import EditProject from './pages/dashboard/EditProject';
+import TaskDashboard from './pages/dashboard/TaskDashboard';
 
 // Helper function to check if the user is logged in
 const isAuthenticated = () => {
@@ -52,8 +53,8 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Overview />} />
-          <Route path="overview" element={<Overview />} />
+          <Route index element={<TaskDashboard/>} />
+          <Route path="task-dashboard" element={<TaskDashboard />} />
           <Route path="projects" element={<Projects />} />
           <Route path="invoice" element={<Invoice />} />
           <Route path="invoice-preview/:invoiceId" element={<InvoicePreview />} />
