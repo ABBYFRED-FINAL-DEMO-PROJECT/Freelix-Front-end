@@ -1,5 +1,5 @@
 // src/pages/dashboard/Dashboard.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Drawer,
@@ -14,9 +14,9 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Container,
 } from '@mui/material';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import WorkIcon from '@mui/icons-material/Work';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -26,6 +26,7 @@ import SunIcon from '@mui/icons-material/WbSunny';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import TaskIcon from '@mui/icons-material/Task';
+import { apiGetUserData } from '../../services/dashboard';
 
 const drawerWidth = 240;
 const collapsedWidth = 56;
@@ -34,9 +35,22 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(!useMediaQuery('(max-width:600px)')); // Collapse drawer by default on small screens
   const [fetchTrigger, setFetchTrigger] = useState(false); // State to trigger re-fetch
+  const [userName, setUserName] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await apiGetUserData();
+        setUserName(`${data.fullName} `);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
@@ -57,20 +71,22 @@ const Dashboard = () => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: darkMode ? '#001B12' : '#FFFFFF' }}>
       <AppBar position="fixed" sx={{ bgcolor: darkMode ? '#001B12' : '#00796B', zIndex: 1201 }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: '#FFFFFF' }}>
-            Dashboard
-          </Typography>
-          <IconButton onClick={handleDarkModeToggle} color="inherit">
-            {darkMode ? <SunIcon /> : <MoonIcon />}
-          </IconButton>
-          <IconButton onClick={handleLogout} color="inherit">
-            <LogoutIcon />
-          </IconButton>
-        </Toolbar>
+        <Container maxWidth="xl">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, color: '#FFFFFF' }}>
+              {userName} 
+            </Typography>
+            <IconButton onClick={handleDarkModeToggle} color="inherit">
+              {darkMode ? <SunIcon /> : <MoonIcon />}
+            </IconButton>
+            <IconButton onClick={handleLogout} color="inherit">
+              <LogoutIcon />
+            </IconButton>
+          </Toolbar>
+        </Container>
       </AppBar>
 
       <Drawer
@@ -98,7 +114,6 @@ const Dashboard = () => {
             { text: 'Projects', icon: <WorkIcon />, to: '/dashboard/projects' },
             { text: 'Invoice', icon: <ReceiptIcon />, to: '/dashboard/invoice' },
             { text: 'Proposals', icon: <AssignmentIcon />, to: '/dashboard/proposals' },
-            // { text: 'Task', icon: <TaskIcon />, to: '/dashboard/Task' },
             { text: 'Profile', icon: <AccountCircleIcon />, to: '/dashboard/profile' },
           ].map(({ text, icon, to }) => (
             <Tooltip title={drawerOpen ? '' : text} arrow key={text} placement="right">
@@ -122,11 +137,12 @@ const Dashboard = () => {
           ml: drawerOpen ? 0 : `${collapsedWidth}px`, // Remove space when drawer is open
           color: darkMode ? '#FFFFFF' : '#000000',
           pt: 8,
-          maxWidth: '100%', // Prevents horizontal scroll on smaller screens
         }}
       >
         <Toolbar />
-        <Outlet context={{ handleAddProject, fetchTrigger }} /> {/* Pass handleAddProject and fetchTrigger */}
+        <Container maxWidth="xl">
+          <Outlet context={{ handleAddProject, fetchTrigger }} /> {/* Pass handleAddProject and fetchTrigger */}
+        </Container>
       </Box>
     </Box>
   );
