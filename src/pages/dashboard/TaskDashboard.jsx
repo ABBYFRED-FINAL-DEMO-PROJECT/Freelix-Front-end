@@ -9,7 +9,7 @@ const TaskDashboard = () => {
   const [editTaskName, setEditTaskName] = useState('');
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
 
-  const dropdownRef = useRef(null);
+  const dropdownRefs = useRef({});
 
   // Add new task
   const addTask = () => {
@@ -64,15 +64,18 @@ const TaskDashboard = () => {
   // Close dropdown if clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpenId(null);
+      if (dropdownOpenId) {
+        const dropdownElement = dropdownRefs.current[dropdownOpenId];
+        if (dropdownElement && !dropdownElement.contains(event.target)) {
+          setDropdownOpenId(null);
+        }
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [dropdownOpenId]);
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -130,7 +133,15 @@ const TaskDashboard = () => {
               .map((task) => (
                 <div
                   key={task.id}
-                  className="relative bg-white p-4 border border-gray-300 rounded-lg shadow-md mb-4"
+                  className={`relative p-4 border border-gray-300 rounded-lg shadow-md mb-4 ${
+                    statusType === 'in-progress'
+                      ? 'bg-[#8BBEB9]'
+                      : statusType === 'done'
+                      ? 'bg-[#4E9E94]'
+                      : statusType === 'closed'
+                      ? 'bg-[#0A7A6D]'
+                      : 'bg-[#DAE8E6]'
+                  }`}
                 >
                   <div className="flex justify-between items-start">
                     <h4 className="text-xl font-semibold">
@@ -146,7 +157,7 @@ const TaskDashboard = () => {
                       )}
                     </h4>
                     {/* Three-dot menu */}
-                    <div ref={dropdownRef} className="relative">
+                    <div ref={(el) => (dropdownRefs.current[task.id] = el)} className="relative">
                       <button
                         onClick={() => toggleDropdown(task.id)}
                         className="text-gray-500 hover:text-gray-700 focus:outline-none"
