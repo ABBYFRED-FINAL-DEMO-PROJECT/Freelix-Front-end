@@ -27,6 +27,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import TaskIcon from '@mui/icons-material/Task';
 import { apiGetUserData } from '../../services/dashboard';
+import { apiLogout } from '../../services/auth';
 
 const drawerWidth = 240;
 const collapsedWidth = 56;
@@ -56,8 +57,13 @@ const Dashboard = () => {
     setDarkMode(!darkMode);
   };
 
-  const handleLogout = () => {
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await apiLogout(); // Call the apiLogout function
+      navigate('/'); // Navigate to the login page
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   const handleDrawerToggle = () => {

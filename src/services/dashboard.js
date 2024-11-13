@@ -50,9 +50,9 @@ export const apiGetAllProjects = async () => {
 
 
 // Get Project by ID
-export const apiGetProjects = async (projectId) => {
+export const apiGetProject = async (projectId) => {
   try {
-    const response = await apiClient.get(`/projects/${projectId}`);
+    const response = await apiClient.get(`/project/${projectId}`);
     return response.data; // Return the advert details
   } catch (error) {
     console.error("Error fetching project:", error);

@@ -14,7 +14,7 @@ import tkImage4 from '../assets/tk3.png';
 import feature1 from '../assets/feature1.jpg';
 import feature2 from '../assets/feature2.jpg';
 import feature3 from '../assets/feature3.jpg';
-import feature4 from '../assets/feature4.jpg';
+import feature5 from '../assets/feature5.png';
 
 const dbImages = [dbImage1, dbImage2, dbImage3, dbImage4];
 const tkImages = [tkImage1, tkImage2, tkImage3, tkImage4];
@@ -30,10 +30,10 @@ const FeatureCard = ({ title, image }) => (
 
 const PuzzleFeatureSection = () => {
   const features = [
-    { title: "Feature 1", image: feature1 },
-    { title: "Feature 2", image: feature2 },
-    { title: "Feature 3", image: feature3 },
-    { title: "Feature 4", image: feature4 },
+    { title: "Contract Generation", image: feature1 },
+    { title: "Free Invoice Downloads", image: feature2 },
+    { title: "Personal Task Tracker", image: feature3 },
+    { title: "Functional Dashboard", image: feature5 },
   ];
 
   return (
@@ -48,7 +48,7 @@ const PuzzleFeatureSection = () => {
     
     {/* Feature Description on the right */}
     <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-8 flex flex-col justify-center">
-      <h2 className="text-3xl font-bold text-gray-800 mb-4">Explore Our Features</h2>
+      <h1 className="text-3xl font-bold text-gray-800 mt-8 mb-8">WHY SIGN UP</h1>
       <p className="text-gray-600 mb-4">
         Our application is designed to provide you with all the tools you need to manage projects efficiently.
         From task management to project tracking, explore each feature by hovering over the cards.
@@ -98,7 +98,7 @@ const LandingPage = () => {
           alt="Top Left Illustration"
           style={{
             position: 'absolute',
-            top: '10%',
+            top: '15%',
             left: '5%',
             width: '20%',
             minWidth: '150px',
