@@ -1,27 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {
+  apiAddTask,
+  apiGetTasks,
+  apiGetTaskById,
+  apiEditTask,
+  apiDeleteTask,
+} from '../../services/task';
 
 const TaskDashboard = () => {
   const [tasks, setTasks] = useState([]);
-  const [taskName, setTaskName] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
   const [status, setStatus] = useState('in-progress');
   const [isEditing, setIsEditing] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
   const [editTaskName, setEditTaskName] = useState('');
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
-
   const dropdownRefs = useRef({});
 
+  // Fetch tasks on mount
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const fetchedTasks = await apiGetTasks();
+      setTasks(fetchedTasks);
+    };
+    fetchTasks();
+  }, []);
+
   // Add new task
-  const addTask = () => {
-    if (!taskName.trim()) return;
-    const newTask = { id: Date.now(), name: taskName, status };
-    setTasks([...tasks, newTask]);
-    setTaskName('');
+  const addTask = async () => {
+    if (!taskDescription.trim()) return;
+    const newTask = { description: taskDescription, status,};
+    const createdTask = await apiAddTask(newTask);
+    setTasks([...tasks, createdTask]);
+    setTaskDescription('');
   };
 
   // Edit task
-  const handleEdit = (id) => {
-    const taskToEdit = tasks.find((task) => task.id === id);
+  const handleEdit = async (id) => {
+    const taskToEdit = await apiGetTaskById(id);
     setEditTaskId(id);
     setEditTaskName(taskToEdit.name);
     setIsEditing(true);
@@ -29,7 +45,8 @@ const TaskDashboard = () => {
   };
 
   // Save edited task
-  const saveEdit = () => {
+  const saveEdit = async () => {
+    await apiEditTask(editTaskId, { name: editTaskName });
     setTasks(
       tasks.map((task) =>
         task.id === editTaskId ? { ...task, name: editTaskName } : task
@@ -41,13 +58,15 @@ const TaskDashboard = () => {
   };
 
   // Delete task
-  const deleteTask = (id) => {
+  const deleteTask = async (id) => {
+    await apiDeleteTask(id);
     setTasks(tasks.filter((task) => task.id !== id));
     setDropdownOpenId(null); // Close dropdown after deletion
   };
 
   // Change status of task
-  const changeStatus = (id, newStatus) => {
+  const changeStatus = async (id, newStatus) => {
+    await apiEditTask(id, { status: newStatus });
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, status: newStatus } : task
@@ -85,8 +104,8 @@ const TaskDashboard = () => {
           <div className="flex-1 mb-4 sm:mb-0">
             <input
               type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md"
               placeholder="Enter Task"
             />
