@@ -31,11 +31,11 @@ const ProtectedRoute = ({ children }) => {
 
 const AppContent = () => {
   const location = useLocation();
-  const isDashboard = location.pathname.startsWith('/dashboard');
+  const hideNavbar = ['/login', '/signup'].includes(location.pathname) || location.pathname.startsWith('/dashboard');
 
   return (
     <>
-      {!isDashboard && <NavigationBar />} {/* Render NavigationBar only if not in dashboard */}
+      {!hideNavbar && <NavigationBar />} {/* Render NavigationBar only if not on login, signup, or dashboard pages */}
 
       <Routes>
         {/* Public routes */}

@@ -52,7 +52,7 @@ const Login = () => {
 };
 
   return (
-    <Box sx={{ marginTop: 4, marginBottom: 4, display: 'flex', justifyContent: 'center', px: 2 }}>
+    <Box sx={{ marginTop: 20, marginBottom: 4, display: 'flex', justifyContent: 'center', px: 2 }}>
       <Card sx={{
         display: 'flex', flexDirection: { xs: 'column', md: 'row' },
         maxWidth: 750, width: '100%', borderRadius: 3, overflow: 'hidden', boxShadow: 5,

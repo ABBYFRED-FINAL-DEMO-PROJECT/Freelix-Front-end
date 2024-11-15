@@ -30,9 +30,9 @@ export const apiGetTasks = async () => {
     }
   };
 
-  export const apiEditTask = async (taskId, taskData) => {
+  export const apiEditTask = async (taskId, description) => {
     try {
-      const response = await apiClient.patch(`/tasks/${taskId}`, taskData);
+      const response = await apiClient.patch(`/tasks/${taskId}`, { description });
       return response.data; // Return the updated task
     } catch (error) {
       console.error("Error editing task:", error);
