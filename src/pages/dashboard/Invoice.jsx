@@ -26,6 +26,8 @@ const Invoice = () => {
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
+  const [isPrintingPDF, setIsPrintingPDF] = useState(false);
+
   // Handlers
   const handleInputChange = (e, field) => {
     setInvoiceData({ ...invoiceData, [field]: e.target.value });
@@ -66,8 +68,6 @@ const Invoice = () => {
   };
 
   // Calculations
-  // Calculations
-  // Calculations
   const calculateSubtotal = () =>
     invoiceData.items.reduce(
       (total, item) =>
@@ -90,20 +90,11 @@ const Invoice = () => {
     }));
   };
 
-  // const downloadPDF = () => {
-  //   const invoiceElement = document.getElementById("invoice");
-
-  //   html2canvas(invoiceElement).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("p", "mm", "a4");
-
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-  //     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  //     pdf.save("invoice.pdf");
-  //   });
-  // };
+  const downloadPDF = () => {
+    setIsPrintingPDF(true);
+    reactToPrintFn();
+    setIsPrintingPDF(false);
+  };
 
   // JSX layout
   return (
@@ -111,7 +102,7 @@ const Invoice = () => {
       <div
         id="invoice"
         ref={contentRef}
-        className="p-4 sm:p-6 md:p-8 bg-white max-w-3xl mx-auto  rounded-lg"
+        className="p-4 sm:p-6 md:p-8 bg-white max-w-3xl mx-auto rounded-lg"
       >
         {/* Header with Logo and Company Info */}
         <div className="flex flex-col sm:flex-row items-center border-b border-gray-300 pb-4 mb-4">
@@ -176,7 +167,11 @@ const Invoice = () => {
               type="date"
               value={invoiceData.invoiceDate}
               onChange={(e) => handleInputChange(e, "invoiceDate")}
-              className="text-sm text-gray-600 mt-2 w-full sm:w-auto"
+              onBlur={(e) => {
+                e.target.type = "text";
+                e.target.placeholder = invoiceData.invoiceDate;
+              }}
+              className="text-sm text-gray-600  text-right mt-2 w-full sm:w-auto"
             />
             <input
               type="text"
@@ -265,21 +260,23 @@ const Invoice = () => {
             </table>
           </div>
 
-          <div className="flex justify-end space-x-4">
-            <button
-              onClick={handleAddRow}
-              className="flex items-center text-blue-500 hover:text-blue-700"
-            >
-              <span className="text-xl font-bold mr-1">+</span> Add Item
-            </button>
-            <button
-              onClick={() => handleRemoveRow(invoiceData.items.length - 1)}
-              className="flex items-center text-red-500 hover:text-red-700"
-            >
-              <span className="text-xl font-bold mr-1">&minus;</span> Remove
-              Item
-            </button>
-          </div>
+          {!isPrintingPDF && (
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleAddRow}
+                className="flex items-center text-blue-500 hover:text-blue-700"
+              >
+                <span className="text-xl font-bold mr-1">+</span> Add Item
+              </button>
+              <button
+                onClick={() => handleRemoveRow(invoiceData.items.length - 1)}
+                className="flex items-center text-red-500 hover:text-red-700"
+              >
+                <span className="text-xl font-bold mr-1">&minus;</span> Remove
+                Item
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Totals */}
@@ -303,9 +300,13 @@ const Invoice = () => {
           {invoiceData.isPaymentInfoEditable ? (
             <textarea
               value={invoiceData.paymentInfo}
-              onChange={(e) => handleInputChange(e, "paymentInfo")}
+              onChange={(e) => {
+                handleInputChange(e, "paymentInfo");
+                e.target.style.height = "auto"; // Reset height
+                e.target.style.height = `${e.target.scrollHeight}px`; // Set to content height
+              }}
               placeholder="Payment Info"
-              className="w-full text-sm text-gray-700 resize-none p-2 rounded-md focus:bg-white focus:border focus:border-blue-500 focus:outline-none transition-colors"
+              className="w-full text-sm text-gray-700 resize-none overflow-hidden p-2 rounded-md focus:bg-white focus:border focus:border-blue-500 focus:outline-none transition-colors"
             />
           ) : (
             <p
@@ -359,7 +360,7 @@ const Invoice = () => {
                 <input
                   type="file"
                   onChange={(e) => handleFileChange(e, "signatureImage")}
-                  className="mt-2 text-sm"
+                  className="mt-2 text-sm text-right"
                 />
               </div>
             )}
@@ -368,7 +369,7 @@ const Invoice = () => {
       </div>
       <div className="flex justify-end">
         <button
-          onClick={reactToPrintFn}
+          onClick={downloadPDF}
           className="bg-[#00796B] hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded mt-4"
         >
           Download PDF

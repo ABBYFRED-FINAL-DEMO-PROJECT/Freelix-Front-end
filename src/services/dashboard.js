@@ -52,13 +52,14 @@ export const apiGetAllProjects = async () => {
 // Get Project by ID
 export const apiGetProject = async (projectId) => {
   try {
-    const response = await apiClient.get(`/project/${projectId}`);
-    return response.data; // Return the advert details
+    const response = await apiClient.get(`/projects/${projectId}`);
+    return response; // Return the entire response object
   } catch (error) {
     console.error("Error fetching project:", error);
     throw error;
   }
 };
+
 
 
 // Update Project
