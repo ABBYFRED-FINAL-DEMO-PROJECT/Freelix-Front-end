@@ -6,7 +6,7 @@ import {
   apiEditTask,
   apiDeleteTask,
 } from '../../services/task';
-import {apiGetUserData} from '../../services/dashboard'
+import { apiGetUserData } from '../../services/dashboard';
 
 const TaskDashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -14,13 +14,14 @@ const TaskDashboard = () => {
   const [status, setStatus] = useState('in progress');
   const [isEditing, setIsEditing] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
-  const [editdescription, setEditDescription] = useState('');
+  const [editDescription, setEditDescription] = useState('');
   const [dropdownOpenId, setDropdownOpenId] = useState(null);
   const [showAddFields, setShowAddFields] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
   const dropdownRefs = useRef({});
 
-  // Fetch tasks and user data on mount
   useEffect(() => {
     const fetchTasks = async () => {
       const fetchedTasks = await apiGetTasks();
@@ -55,10 +56,10 @@ const TaskDashboard = () => {
 
   const saveEdit = async () => {
     try {
-      await apiEditTask(editTaskId, editdescription);
+      await apiEditTask(editTaskId, editDescription);
       setTasks(
         tasks.map((task) =>
-          task.id === editTaskId ? { ...task, description: editdescription } : task
+          task.id === editTaskId ? { ...task, description: editDescription } : task
         )
       );
       setIsEditing(false);
@@ -70,14 +71,19 @@ const TaskDashboard = () => {
     }
   };
 
-  const deleteTask = async (id) => {
-    await apiDeleteTask(id);
-    setTasks(tasks.filter((task) => task.id !== id));
-    setDropdownOpenId(null); // Close dropdown after deletion
+  const confirmDeleteTask = (id) => {
+    setTaskToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const deleteTask = async () => {
+    await apiDeleteTask(taskToDelete);
+    setTasks(tasks.filter((task) => task.id !== taskToDelete));
+    setShowDeleteModal(false);
+    setTaskToDelete(null);
   };
 
   const changeStatus = (id, newStatus) => {
-    // Client-side only update for task status
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, status: newStatus } : task
@@ -90,26 +96,12 @@ const TaskDashboard = () => {
     setDropdownOpenId(dropdownOpenId === id ? null : id);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownOpenId) {
-        const dropdownElement = dropdownRefs.current[dropdownOpenId];
-        if (dropdownElement && !dropdownElement.contains(event.target)) {
-          setDropdownOpenId(null);
-        }
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [dropdownOpenId]);
-
-  // Task counts
-  const totalTasks = tasks.length;
-  const inProgressTasks = tasks.filter((task) => task.status === 'in progress').length;
-  const doneTasks = tasks.filter((task) => task.status === 'done').length;
-  const closedTasks = tasks.filter((task) => task.status === 'closed').length;
+  const taskColumns = [
+    { statusType: 'all', count: tasks.length, label: 'All Tasks', color: '#B2DFDB' },
+    { statusType: 'in progress', count: tasks.filter((task) => task.status === 'in progress').length, label: 'In Progress', color: '#80CBC4' },
+    { statusType: 'done', count: tasks.filter((task) => task.status === 'done').length, label: 'Done', color: '#4DB6AC' },
+    { statusType: 'closed', count: tasks.filter((task) => task.status === 'closed').length, label: 'Closed', color: '#00796B' },
+  ];
 
   return (
     <div className="max-w-7xl mx-auto p-4">
@@ -166,14 +158,9 @@ const TaskDashboard = () => {
 
       {/* Task List */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { statusType: 'all', count: totalTasks, label: 'All Tasks' },
-          { statusType: 'in progress', count: inProgressTasks, label: 'In Progress' },
-          { statusType: 'done', count: doneTasks, label: 'Done' },
-          { statusType: 'closed', count: closedTasks, label: 'Closed' },
-        ].map(({ statusType, count, label }) => (
-          <div key={statusType}>
-            <h3 className="text-2xl font-semibold mb-4 capitalize">
+        {taskColumns.map(({ statusType, count, label, color }) => (
+          <div key={statusType} className="p-4 rounded-lg shadow-md" style={{ backgroundColor: color }}>
+            <h3 className="text-2xl font-semibold mb-4 capitalize text-white">
               {label} ({count})
             </h3>
             {tasks
@@ -183,22 +170,14 @@ const TaskDashboard = () => {
               .map((task) => (
                 <div
                   key={task.id}
-                  className={`relative p-4 border border-gray-300 rounded-lg shadow-md mb-4 ${
-                    statusType === 'in progress'
-                      ? 'bg-[#8BBEB9]'
-                      : statusType === 'done'
-                      ? 'bg-[#4E9E94]'
-                      : statusType === 'closed'
-                      ? 'bg-[#0A7A6D]'
-                      : 'bg-[#DAE8E6]'
-                  }`}
+                  className="relative p-4 border border-gray-300 rounded-lg shadow-md mb-4 bg-white"
                 >
                   <div className="flex justify-between items-start">
                     <h4 className="text-xl font-semibold">
                       {isEditing && editTaskId === task.id ? (
                         <input
                           type="text"
-                          value={editdescription}
+                          value={editDescription}
                           onChange={(e) => setEditDescription(e.target.value)}
                           className="w-full border px-3 py-2 rounded-md"
                         />
@@ -222,30 +201,10 @@ const TaskDashboard = () => {
                             Edit
                           </button>
                           <button
-                            onClick={() => deleteTask(task.id)}
+                            onClick={() => confirmDeleteTask(task.id)}
                             className="block px-4 py-2 text-sm text-left text-gray-700 w-full hover:bg-gray-100"
                           >
                             Delete
-                          </button>
-                          <button
-                            onClick={() =>
-                              changeStatus(
-                                task.id,
-                                task.status === 'in progress'
-                                  ? 'done'
-                                  : task.status === 'done'
-                                  ? 'closed'
-                                  : 'in progress'
-                              )
-                            }
-                            className="block px-4 py-2 text-sm text-left text-gray-700 w-full hover:bg-gray-100"
-                          >
-                            Move to{' '}
-                            {task.status === 'in progress'
-                              ? 'Done'
-                              : task.status === 'done'
-                              ? 'Closed'
-                              : 'In Progress'}
                           </button>
                         </div>
                       )}
@@ -273,6 +232,30 @@ const TaskDashboard = () => {
           </div>
         ))}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
+            <p className="text-gray-600 mb-4">Are you sure you want to delete this task?</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteTask}
+                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
