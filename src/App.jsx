@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { SnackbarProvider } from 'notistack';
 import NavigationBar from './layouts/NavigationBar';
 import Dashboard from './pages/dashboard/Dashboard';
-// import TaskDashboard from './pages/dashboard/TaskDashboard'; 
 import Profile from './pages/dashboard/Profile';
 import Projects from './pages/dashboard/Projects';
 import Invoice from './pages/dashboard/Invoice';
