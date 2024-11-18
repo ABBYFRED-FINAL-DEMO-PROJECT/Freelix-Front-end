@@ -92,8 +92,10 @@ const Invoice = () => {
 
   const downloadPDF = () => {
     setIsPrintingPDF(true);
-    reactToPrintFn();
-    setIsPrintingPDF(false);
+    setTimeout(() => {
+      reactToPrintFn();
+      setIsPrintingPDF(false);
+    }, 2000);
   };
 
   // JSX layout
