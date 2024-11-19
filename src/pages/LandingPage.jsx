@@ -15,6 +15,7 @@ import feature1 from '../assets/feature1.jpg';
 import feature2 from '../assets/feature2.jpg';
 import feature3 from '../assets/feature3.jpg';
 import feature5 from '../assets/feature5.png';
+import whysign from '../assets/whysign.jpg'
 
 const dbImages = [dbImage1, dbImage2, dbImage3, dbImage4];
 const tkImages = [tkImage1, tkImage2, tkImage3, tkImage4];
@@ -28,6 +29,68 @@ const FeatureCard = ({ title, image }) => (
   </div>
 );
 
+const WhyFreelixSection = () => (
+  <section className="bg-white mt-40 py-16 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row items-center gap-12">
+        {/* Text Content */}
+        <div className="w-full md:w-1/2 space-y-6">
+          <h2 className="text-4xl font-bold text-[#00796B]">
+            Why  Freelix?
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-[#00796B] mt-1" />
+              <p className="text-gray-700">
+                Streamlined workflow management with integrated tools for invoicing, 
+                contract handling, and task tracking
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-[#00796B] mt-1" />
+              <p className="text-gray-700">
+                Secure  and automated invoice generation to save 
+                you time and reduce administrative burden
+              </p>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="text-[#00796B] mt-1" />
+              <p className="text-gray-700">
+                Advanced analytics and reporting to help you make data-driven 
+                decisions for your freelance business
+              </p>
+            </div>
+          </div>
+          {/* <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#00796B",
+              color: "white",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            }}
+            className="shadow hover:bg-gray-200 transition"
+            component={Link}
+            to="/signup"
+          >
+            Join Freelix Today
+          </Button> */}
+        </div>
+        
+        {/* Image */}
+        <div className="w-full md:w-2/5">
+          <img
+            src={whysign}
+            alt="Freelix Platform"
+            className="rounded-lg shadow-xl w-full h-auto object-cover"
+            style={{ maxHeight: '400px' }} 
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 const PuzzleFeatureSection = () => {
   const features = [
     { title: "Contract Generation", image: feature1 },
@@ -37,31 +100,62 @@ const PuzzleFeatureSection = () => {
   ];
 
   return (
-    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8 mt-40">
-  <div className="max-w-7xl mx-auto bg-[#DEF7E5] rounded-lg shadow-lg p-8 flex flex-col md:flex-row items-start">
-    {/* Feature Cards on the left */}
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 w-full md:w-1/2">
-      {features.map((feature, index) => (
-        <FeatureCard key={index} title={feature.title} image={feature.image} />
-      ))}
-    </div>
-    
-    {/* Feature Description on the right */}
-    <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-8 flex flex-col justify-center">
-      <h1 className="text-3xl font-bold text-gray-800 mt-8 mb-8">WHY SIGN UP</h1>
-      <p className="text-gray-600 mb-4">
-        Our application is designed to provide you with all the tools you need to manage projects efficiently.
-        From task management to project tracking, explore each feature by hovering over the cards.
-      </p>
-      <p className="text-gray-600">
-        Discover how our features can help streamline your workflow and increase productivity.
-      </p>
-    </div>
-  </div>
-</section>
+    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto bg-[#DEF7E5] rounded-lg shadow-lg p-8 flex flex-col md:flex-row items-start">
+        {/* Feature Cards on the left */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 w-full md:w-1/2">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} title={feature.title} image={feature.image} />
+          ))}
+        </div>
+        
+        {/* Feature Description on the right */}
+        <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-8 flex flex-col justify-center space-y-6">
+          <h1 className="text-4xl font-bold text-[#00796B] animate-fadeInUp">
+            Explore Our Features
+          </h1>
 
+          <div className="space-y-4 animate-fadeInUp delay-100">
+            <p className="text-gray-800 text-lg leading-relaxed">
+              Transform your project management experience with our cutting-edge
+              tools and intuitive features. Each component is crafted to enhance
+              your productivity and streamline collaboration.
+            </p>
+            <p className="text-gray-800 text-lg leading-relaxed">
+              Join thousands of teams who have already revolutionized their
+              workflow with our platform.
+            </p>
+          </div>
+          <div>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#00796B",
+                color: "white",
+                fontWeight: "bold",
+                padding: "10px 20px",
+                marginBottom: "20px",
+              }}
+              className="shadow hover:bg-gray-200 transition"
+              component={Link}
+              to="/login"
+            >
+              Get Started
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
+
+const Footer = () => (
+  <footer className="bg-[#00796B] text-white py-4">
+    <div className="max-w-7xl mx-auto px-4 text-center">
+      <p>© {new Date().getFullYear()} Freelix. All rights reserved.</p>
+    </div>
+  </footer>
+);
 
 const LandingPage = () => {
   const [dbIndex, setDbIndex] = useState(0);
@@ -117,20 +211,19 @@ const LandingPage = () => {
               Think, plan, & track <span className="block">all in one place</span>
             </h1>
             <Button
-              variant="contained"
-              style={{
-                backgroundColor: '#00796B',
-                color: 'white',
-                fontWeight: 'bold',
-                padding: '10px 20px',
-                marginBottom: '20px',
-              }}
-              className="shadow hover:bg-gray-200 transition"
-              component={Link}
-              to="/login"
-            >
-              Get Started
-            </Button>
+            variant="contained"
+            style={{
+              backgroundColor: "#00796B",
+              color: "white",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            }}
+            className="shadow hover:bg-gray-200 transition"
+            component={Link}
+            to="/signup"
+          >
+            Join Freelix Today
+          </Button>
           </div>
         </div>
 
@@ -151,8 +244,14 @@ const LandingPage = () => {
         />
       </div>
 
+      {/* Why Freelix Section */}
+      <WhyFreelixSection />
+
       {/* Puzzle Feature Section */}
       <PuzzleFeatureSection />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

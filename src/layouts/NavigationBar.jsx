@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -10,13 +10,13 @@ import {
   ListItem,
   ListItemText,
   Box,
-} from '@mui/material';
-import { Link } from 'react-router-dom';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import InfoIcon from '@mui/icons-material/Info';
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import MenuIcon from '@mui/icons-material/Menu';
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import InfoIcon from "@mui/icons-material/Info";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const NavigationBar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -28,9 +28,9 @@ const NavigationBar = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -39,27 +39,29 @@ const NavigationBar = () => {
   };
 
   const navItems = [
-    { text: 'About', icon: <InfoIcon />, to: '/about' },
-    { text: 'Login', icon: <LoginIcon />, to: '/login' },
-    { text: 'Signup', icon: <PersonAddIcon />, to: '/signup' },
+    { text: "About", icon: <InfoIcon />, to: "/about" },
+    { text: "Login", icon: <LoginIcon />, to: "/login" },
+    { text: "Signup", icon: <PersonAddIcon />, to: "/signup" },
   ];
 
   return (
     <>
       <AppBar
-        position="static"
+        position="fixed"
         sx={{
-          backgroundColor: scrolled ? '#00796B' : 'transparent',
-          transition: 'background-color 0.3s ease',
-          padding: '0 50px', // Added padding for both sides
+          backgroundColor: scrolled ? "#00796B" : "transparent",
+          transition: "background-color 0.3s ease",
+          padding: "0 50px", // Added padding for both sides
+          boxShadow: "none",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: { xs: '0 8px', md: '0 16px' },
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: { xs: "0 8px", md: "0 16px" },
           }}
         >
           {/* App Logo with link to home page */}
@@ -68,10 +70,10 @@ const NavigationBar = () => {
             component={Link}
             to="/"
             sx={{
-              color: scrolled ? 'white' : '#00796B',
-              transition: 'color 0.3s ease',
-              fontWeight: 'bold',
-              textDecoration: 'none', // To remove underline
+              color: scrolled ? "white" : "#00796B",
+              transition: "color 0.3s ease",
+              fontWeight: "bold",
+              textDecoration: "none", // To remove underline
             }}
           >
             Freelix
@@ -79,12 +81,15 @@ const NavigationBar = () => {
           {/* For mobile view */}
           <IconButton
             onClick={toggleDrawer(true)}
-            sx={{ display: { xs: 'block', md: 'none' }, color: scrolled ? 'white' : '#00796B' }}
+            sx={{
+              display: { xs: "block", md: "none" },
+              color: scrolled ? "white" : "#00796B",
+            }}
           >
             <MenuIcon />
           </IconButton>
           {/* Navigation Buttons for larger screens */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
             {navItems.map((item) => (
               <Button
                 key={item.text}
@@ -92,9 +97,9 @@ const NavigationBar = () => {
                 to={item.to}
                 startIcon={item.icon}
                 sx={{
-                  color: scrolled ? 'white' : '#00796B',
-                  textTransform: 'capitalize',
-                  transition: 'color 0.3s ease',
+                  color: scrolled ? "white" : "#00796B",
+                  textTransform: "capitalize",
+                  transition: "color 0.3s ease",
                 }}
               >
                 {item.text}
@@ -106,7 +111,11 @@ const NavigationBar = () => {
 
       {/* Drawer for mobile view */}
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box
+          sx={{ width: 250 }}
+          role="presentation"
+          onClick={toggleDrawer(false)}
+        >
           <List>
             {navItems.map((item) => (
               <ListItem button component={Link} to={item.to} key={item.text}>

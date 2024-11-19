@@ -9,13 +9,13 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  CircularProgress,
   Box,
+  Skeleton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ViewList, ViewModule, Add } from "@mui/icons-material";
 import { apiGetAllProjects } from "../../services/dashboard.js";
-import { FaCalendarAlt, FaFlag, FaDollarSign } from "react-icons/fa"; // Icons for details
+import { FaCalendarAlt, FaFlag, FaDollarSign } from "react-icons/fa";
 
 const Projects = () => {
   const [viewMode, setViewMode] = useState("grid");
@@ -71,7 +71,9 @@ const Projects = () => {
       <div className="flex justify-center items-center mt-4 space-x-2">
         <button
           className={`px-3 py-1 rounded-md ${
-            currentPage === 1 ? "bg-gray-300 text-gray-500" : "bg-teal-600 text-white hover:bg-teal-700"
+            currentPage === 1
+              ? "bg-gray-300 text-gray-500"
+              : "bg-teal-600 text-white hover:bg-teal-700"
           }`}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -83,7 +85,9 @@ const Projects = () => {
             key={number}
             onClick={() => setCurrentPage(number)}
             className={`px-3 py-1 rounded-md ${
-              currentPage === number ? "bg-teal-700 text-white" : "bg-gray-200 text-teal-700 hover:bg-teal-500"
+              currentPage === number
+                ? "bg-teal-700 text-white"
+                : "bg-gray-200 text-teal-700 hover:bg-teal-500"
             }`}
           >
             {number}
@@ -91,7 +95,9 @@ const Projects = () => {
         ))}
         <button
           className={`px-3 py-1 rounded-md ${
-            currentPage === totalPages ? "bg-gray-300 text-gray-500" : "bg-teal-600 text-white hover:bg-teal-700"
+            currentPage === totalPages
+              ? "bg-gray-300 text-gray-500"
+              : "bg-teal-600 text-white hover:bg-teal-700"
           }`}
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
@@ -127,15 +133,43 @@ const Projects = () => {
       </div>
 
       {isLoading ? (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          minHeight="50vh"
-        >
-          <CircularProgress size={64} color="primary" />
-          <span className="ml-4 text-gray-600 text-lg">Loading projects...</span>
-        </Box>
+        <div>
+          {viewMode === "grid" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="bg-white shadow-lg rounded-lg p-6">
+                  <Skeleton variant="text" width="70%" height={32} className="mb-2" />
+                  <div className="flex justify-between items-center mb-2">
+                    <Skeleton variant="text" width="40%" />
+                    <Skeleton variant="text" width="30%" />
+                  </div>
+                  <Skeleton variant="text" width="50%" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Project Name</TableCell>
+                    <TableCell>Client Name</TableCell>
+                    <TableCell>Date Added</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {[...Array(6)].map((_, index) => (
+                    <TableRow key={index}>
+                      <TableCell><Skeleton variant="text" /></TableCell>
+                      <TableCell><Skeleton variant="text" /></TableCell>
+                      <TableCell><Skeleton variant="text" /></TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
       ) : (
         <div>
           {viewMode === "grid" ? (
