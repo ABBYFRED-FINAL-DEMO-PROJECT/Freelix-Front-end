@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiGetProject, apiDeleteProject } from '../../services/dashboard';
 import { FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const ProjectDetails = () => {
   const { projectId } = useParams();
@@ -47,9 +49,28 @@ const ProjectDetails = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-[50vh]">
-        <div className="animate-spin h-16 w-16 border-4 border-blue-500 border-t-transparent rounded-full"></div>
-        <p className="mt-4 text-gray-600 text-lg">Loading project details...</p>
+      <div className="max-w-4xl mx-auto p-4">
+        <div className="mb-4">
+          <Skeleton height={40} width={300} />
+        </div>
+        <div className="bg-white shadow-lg rounded-lg p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[...Array(5)].map((_, index) => (
+              <div key={index}>
+                <Skeleton height={24} width={120} className="mb-2" />
+                <Skeleton height={20} width={200} />
+              </div>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Skeleton height={24} width={120} className="mb-2" />
+            <Skeleton height={60} />
+          </div>
+          <div className="flex mt-6 space-x-4">
+            <Skeleton height={48} width={48} circle />
+            <Skeleton height={48} width={48} circle />
+          </div>
+        </div>
       </div>
     );
   }
