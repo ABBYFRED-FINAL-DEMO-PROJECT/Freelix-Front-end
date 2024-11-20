@@ -7,7 +7,6 @@ import Profile from './pages/dashboard/Profile';
 import Projects from './pages/dashboard/Projects';
 import Invoice from './pages/dashboard/Invoice';
 import InvoicePreview from './pages/dashboard/InvoicePreview';
-import Proposals from './pages/dashboard/Proposals';
 import About from './pages/about/About';
 import LandingPage from './pages/LandingPage'; 
 import Login from './pages/Login'; 
@@ -16,6 +15,7 @@ import ProjectDetails from './pages/dashboard/ProjectDetails';
 import AddProject from './pages/dashboard/AddProject';
 import EditProject from './pages/dashboard/EditProject';
 import TaskDashboard from './pages/dashboard/TaskDashboard';
+import Agreements from './pages/dashboard/Agreements';
 
 // Helper function to check if the user is logged in
 const isAuthenticated = () => {
@@ -57,7 +57,7 @@ const AppContent = () => {
           <Route path="projects" element={<Projects />} />
           <Route path="invoice" element={<Invoice />} />
           <Route path="invoice-preview/:invoiceId" element={<InvoicePreview />} />
-          <Route path="proposals" element={<Proposals />} />
+          <Route path="agreements" element={<Agreements />} />
           <Route path="profile" element={<Profile />} />
           <Route path="project/:projectId" element={<ProjectDetails />} />
           <Route path="add-project" element={<AddProject />} />

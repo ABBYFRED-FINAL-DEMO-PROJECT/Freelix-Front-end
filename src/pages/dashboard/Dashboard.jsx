@@ -179,7 +179,7 @@ const Dashboard = () => {
             { text: 'Task', icon: <TaskIcon />, to: '/dashboard' },
             { text: 'Projects', icon: <WorkIcon />, to: '/dashboard/projects' },
             { text: 'Invoice', icon: <ReceiptIcon />, to: '/dashboard/invoice' },
-            { text: 'Proposals', icon: <AssignmentIcon />, to: '/dashboard/proposals' },
+            { text: 'Agreements', icon: <AssignmentIcon />, to: '/dashboard/agreements' },
             { text: 'Profile', icon: <AccountCircleIcon />, to: '/dashboard/profile' },
           ].map(({ text, icon, to }) => (
             <Tooltip title={drawerOpen ? '' : text} arrow key={text} placement="right">

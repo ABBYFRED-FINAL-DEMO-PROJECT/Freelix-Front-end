@@ -23,7 +23,6 @@ const EditProject = () => {
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    // Fetch existing project details using projectId
     const fetchProject = async () => {
       try {
         const res = await apiGetProject(projectId);
@@ -60,14 +59,14 @@ const EditProject = () => {
     try {
       await apiUpdateProject(projectId, updatedProject);
       console.log('Project updated successfully:', updatedProject);
-      navigate('/dashboard/projects'); // Redirect after successful update
+      navigate('/dashboard/projects');
     } catch (error) {
       console.error('Error updating project:', error);
     }
   };
 
   return (
-    <Box p={2}>
+    <Box p={2} sx={{ maxWidth: '800px', margin: '0 auto' }}>
       <Typography variant="h4" color="#00796B" mb={2}>
         Edit Project
       </Typography>
@@ -148,9 +147,40 @@ const EditProject = () => {
               required
               margin="normal"
             />
-            <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-              Update Project
-            </Button>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2, 
+              mt: 2,
+              justifyContent: 'flex-end' 
+            }}>
+              <Button
+                variant="outlined"
+                sx={{
+                  color: '#00796B',
+                  borderColor: '#00796B',
+                  '&:hover': {
+                    borderColor: '#00796B',
+                    backgroundColor: 'rgba(0, 121, 107, 0.04)'
+                  }
+                }}
+                onClick={() => navigate('/dashboard/projects')}
+              >
+                Close
+              </Button>
+              <Button 
+                type="submit" 
+                variant="contained"
+                sx={{
+                  backgroundColor: '#00796B',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: '#00695C'
+                  }
+                }}
+              >
+                Update Project
+              </Button>
+            </Box>
           </form>
         </CardContent>
       </Card>

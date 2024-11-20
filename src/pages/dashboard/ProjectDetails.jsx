@@ -37,14 +37,14 @@ const ProjectDetails = () => {
     try {
       await apiDeleteProject(projectId);
       console.log(`Project with ID: ${projectId} deleted successfully.`);
-      navigate('/dashboard/projects'); // Navigate after successful delete
+      navigate('/dashboard/projects');
     } catch (error) {
       console.error('Error deleting project:', error);
     }
   };
 
   const handleClose = () => {
-    navigate('/dashboard/projects'); // Navigate back to projects page
+    navigate('/dashboard/projects');
   };
 
   if (isLoading) {
@@ -85,61 +85,64 @@ const ProjectDetails = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl font-bold text-teal-600 mb-4">{project.projectName || 'Project Details'}</h1>
-      <div className="relative bg-white shadow-lg rounded-lg p-6">
-        {/* Close Icon */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
-          title="Close"
-        >
-          <FaTimes size={20} />
-        </button>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Client Name:</h2>
-            <p className="text-gray-600">{project.clientName || 'N/A'}</p>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Begins:</h2>
-            <p className="text-gray-600">{project.projectBegins || 'N/A'}</p>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Deadline:</h2>
-            <p className="text-gray-600">{project.projectDeadline || 'N/A'}</p>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Budget:</h2>
-            <p className="text-gray-600">{project.projectBudget || 'N/A'}</p>
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-700">Status:</h2>
-            <p className="text-gray-600">{project.status || 'N/A'}</p>
-          </div>
-        </div>
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold text-gray-700">Description:</h2>
-          <p className="text-gray-600">{project.description || 'No description available.'}</p>
-        </div>
-        <div className="flex mt-6 space-x-4">
+      <div className="bg-white shadow-xl rounded-lg overflow-hidden relative">
+        <div className="bg-gradient-to-r from-[#00796B] to-[#004D40] p-6">
+          <h1 className="text-4xl font-bold text-white">{project.projectName || 'Project Details'}</h1>
+          {/* Close Icon Button */}
           <button
-            onClick={handleEdit}
-            className="p-3 bg-blue-500 text-white rounded-full shadow hover:bg-blue-600"
-            title="Edit Project"
+            onClick={handleClose}
+            className="absolute top-4 right-4 text-white hover:text-gray-200 focus:outline-none"
+            title="Close"
           >
-            <FaEdit />
+            <FaTimes size={20} />
           </button>
-          <button
-            onClick={() => setShowDeleteModal(true)}
-            className="p-3 bg-red-500 text-white rounded-full shadow hover:bg-red-600"
-            title="Delete Project"
-          >
-            <FaTrash />
-          </button>
+        </div>
+        <div className="p-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">Client Name:</h2>
+              <p className="text-gray-600">{project.clientName || 'N/A'}</p>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">Begins:</h2>
+              <p className="text-gray-600">{project.projectBegins || 'N/A'}</p>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">Deadline:</h2>
+              <p className="text-gray-600">{project.projectDeadline || 'N/A'}</p>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">Budget:</h2>
+              <p className="text-gray-600">{project.projectBudget || 'N/A'}</p>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-700">Status:</h2>
+              <p className="text-gray-600">{project.status || 'N/A'}</p>
+            </div>
+          </div>
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold text-gray-700">Description:</h2>
+            <p className="text-gray-600">{project.description || 'No description available.'}</p>
+          </div>
+          <div className="flex mt-8 space-x-4">
+            <button
+              onClick={handleEdit}
+              className="p-3 bg-[#00796B] text-white rounded-full shadow-lg hover:bg-[#005f56] transition duration-300"
+              title="Edit Project"
+            >
+              <FaEdit />
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="p-3 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition duration-300"
+              title="Delete Project"
+            >
+              <FaTrash />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
