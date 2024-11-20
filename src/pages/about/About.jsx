@@ -5,7 +5,7 @@ const teamMembers = [
   {
     name: "Davida Prempeh",
     role: "Backend Developer",
-    image: "/abt2.jpg",
+    image: "/davida.jpg",
     bio: "Specialized in building robust APIs and database architecture",
     social: {
       github: "https://github.com/johndoe",
@@ -16,7 +16,7 @@ const teamMembers = [
   {
     name: "Fredrick Kumah",
     role: "Backend Developer",
-    image: "/abt1.jpg",
+    image: "/fred.jpg",
     bio: "Expert in system optimization and cloud infrastructure",
     social: {
       github: "https://github.com/janesmith",
@@ -27,7 +27,7 @@ const teamMembers = [
   {
     name: "Abigail Debrah",
     role: "Frontend Developer",
-    image: "/abt3.jpg",
+    image: "/abi2.JPG",
     bio: "Passionate about creating beautiful and intuitive user interfaces",
     social: {
       github: "https://github.com/mikejohnson",

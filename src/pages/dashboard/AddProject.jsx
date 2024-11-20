@@ -36,19 +36,12 @@ const AddProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
-      // Call the actual API to post the project data
       const response = await apiPostProject(formData);
       console.log('Project posted:', response);
-      
-      // Show success notification
       enqueueSnackbar("Project added successfully!", { variant: "success" });
-  
-      // Call handleAddProject to update the project list
       handleAddProject();
-  
-      // Navigate back to projects page
       navigate("/dashboard/projects");
     } catch (err) {
       setError(err.message || "Failed to add project");
@@ -57,7 +50,10 @@ const AddProject = () => {
       setLoading(false);
     }
   };
-  
+
+  const handleClose = () => {
+    navigate("/dashboard/projects");
+  };
 
   return (
     <Box p={4} className="bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
@@ -120,9 +116,8 @@ const AddProject = () => {
           value={formData.projectBudget}
           onChange={handleChange}
         />
-
         <TextField
-          label=" Description"
+          label="Description"
           name="description"
           placeholder="Enter project description"
           variant="outlined"
@@ -133,7 +128,6 @@ const AddProject = () => {
           value={formData.description}
           onChange={handleChange}
         />
-
         <TextField
           label="Status"
           name="status"
@@ -144,19 +138,27 @@ const AddProject = () => {
           value={formData.status}
           onChange={handleChange}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          disabled={loading}
-          style={{ backgroundColor: "#00796B", color: "white" }}
-        >
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : (
-            "Add Project"
-          )}
-        </Button>
+        <Box display="flex" justifyContent="space-between" mt={2}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            style={{ backgroundColor: "#00796B", color: "white", flexGrow: 1, marginRight: '8px' }}
+          >
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              "Add Project"
+            )}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            style={{ borderColor: "#00796B", color: "#00796B", flexGrow: 1 }}
+          >
+            Close
+          </Button>
+        </Box>
       </form>
       {error && (
         <Snackbar
