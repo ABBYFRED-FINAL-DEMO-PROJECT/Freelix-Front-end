@@ -15,7 +15,9 @@ import feature1 from '../assets/feature1.jpg';
 import feature2 from '../assets/feature2.jpg';
 import feature3 from '../assets/feature3.jpg';
 import feature5 from '../assets/feature5.png';
-import whysign from '../assets/whysign.jpg'
+import whysign from '../assets/whysign.jpg';
+import { GitHubIcon, TwitterIcon, LinkedInIcon } from '../layouts/SocialIcons';
+
 
 const dbImages = [dbImage1, dbImage2, dbImage3, dbImage4];
 const tkImages = [tkImage1, tkImage2, tkImage3, tkImage4];
@@ -152,6 +154,17 @@ const PuzzleFeatureSection = () => {
 const Footer = () => (
   <footer className="bg-[#00796B] text-white py-4">
     <div className="max-w-7xl mx-auto px-4 text-center">
+      <div className="flex justify-center space-x-4 mb-2">
+        <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300">
+          <GitHubIcon />
+        </a>
+        <a href="https://twitter.com/your-username" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300">
+          <TwitterIcon />
+        </a>
+        <a href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300">
+          <LinkedInIcon />
+        </a>
+      </div>
       <p>© {new Date().getFullYear()} Freelix. All rights reserved.</p>
     </div>
   </footer>
